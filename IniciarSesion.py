@@ -8,14 +8,14 @@
 
     See the file LICENSE for copying permission.
 """
-
+'''
 import sys
 import logging
-import getpass
-from optparse import OptionParser
+'''
+
 
 import sleekxmpp
-
+'''
 # Python versions before 3.0 do not use UTF-8 encoding
 # by default. To ensure that Unicode is handled properly
 # throughout SleekXMPP, we will set the default encoding
@@ -25,8 +25,8 @@ if sys.version_info < (3, 0):
     setdefaultencoding('utf8')
 else:
     raw_input = input
-
-
+'''
+raw_input = input
 class SendMsgBot(sleekxmpp.ClientXMPP):
 
     """
@@ -75,6 +75,7 @@ class SendMsgBot(sleekxmpp.ClientXMPP):
 
 
 if __name__ == '__main__':
+    '''
     # Setup the command line arguments.
     optp = OptionParser()
 
@@ -100,24 +101,25 @@ if __name__ == '__main__':
                     help="message to send")
 
     opts, args = optp.parse_args()
-
+    '''
     # Setup logging.
+    '''
     logging.basicConfig(level=opts.loglevel,
                         format='%(levelname)-8s %(message)s')
-
-    if opts.jid is None:
-        opts.jid = raw_input("Username: ")
-    if opts.password is None:
-        opts.password = getpass.getpass("Password: ")
-    if opts.to is None:
-        opts.to = raw_input("Send To: ")
-    if opts.message is None:
-        opts.message = raw_input("Message: ")
+    '''
+    
+    jid = 'tomas@redes2020.xyz'
+    
+    password = 'Tomas2020'
+    
+    to = 'dorval@redes2020.xyz'
+    
+    message = 'Mensaje desde codigo'
 
     # Setup the EchoBot and register plugins. Note that while plugins may
     # have interdependencies, the order in which you register them does
     # not matter.
-    xmpp = SendMsgBot(opts.jid, opts.password, opts.to, opts.message)
+    xmpp = SendMsgBot(jid, password, to, message)
     xmpp.register_plugin('xep_0030') # Service Discovery
     xmpp.register_plugin('xep_0199') # XMPP Ping
 
