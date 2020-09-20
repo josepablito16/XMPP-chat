@@ -9,12 +9,13 @@
     See the file LICENSE for copying permission.
 """
 import sleekxmpp
+import curses
 
 class Cliente(sleekxmpp.ClientXMPP):
 
     def __init__(self, jid, password):
         sleekxmpp.ClientXMPP.__init__(self, jid, password)
-
+        self.mensajes='Nada'
         # The session_start event will be triggered when
         # the bot establishes its connection with the server
         # and the XML streams are ready for use. We want to
@@ -25,6 +26,10 @@ class Cliente(sleekxmpp.ClientXMPP):
     
     def mensajeNuevo(self,msg):
         print(msg)
+        self.mensajes='nuevo Mensaje'
+    
+    def getMensajePrueba(self):
+        return self.mensajes
     
     def desconectarse(self):
         # Using wait=True ensures that the send queue will be
@@ -41,8 +46,8 @@ class Cliente(sleekxmpp.ClientXMPP):
     
     def enviarMensaje(self,contacto,mensaje):
         print('Enviar mensaje')
-        self.sendMessage(mto='dorval@redes2020.xyz',
-                          mbody='mensaje desde codigo',
+        self.sendMessage(mto=contacto,
+                          mbody=mensaje,
                           mtype='chat')
 
     def start(self, event):
