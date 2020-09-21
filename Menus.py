@@ -27,7 +27,42 @@ def validarInputMenuInicial(userInput):
     except:
         print('Invalid Option!')
         time.sleep(1)
-        return 0 
+        return 0
+
+def validarInputHome(userInput):
+    try:
+        userInput=int(userInput)
+        if(1<=userInput<=5):
+            return 1
+        else:
+            print('Invalid Option!')
+            time.sleep(1)
+            return 0
+    except:
+        print('Invalid Option!')
+        time.sleep(1)
+        return 0
+
+def printMenuLogIn():
+    print("***************")
+    print("***  Login  ***")
+    print("***************")
+    user=input("Enter your user name: ")
+    password=input("Enter your password: ")
+    return user,password
+
+def printHomeMenu():
+    print("*******************")
+    print("***  Main Menu  ***")
+    print("*******************")
+    print()
+    #print("[*] Nuevo mensaje de Jorge")
+    print("")
+    print("1. Show all users")
+    print("2. Add user")
+    print("3. Inbox")
+    print("4. Delete account")
+    print("5. Exit")
 
 def printMenuRegister():
     while 1:

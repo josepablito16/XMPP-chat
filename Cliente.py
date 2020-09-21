@@ -104,11 +104,11 @@ class RegisterClient(ClientXMPP):
 
         try:
             resp.send(now=True)
-            logging.info("Account created for %s!" % self.boundjid)
+            print("Account created for %s!" % self.boundjid)
         except IqError as e:
-            logging.error("Could not register account: %s" %
+            print("Could not register account: %s" %
                           e.iq['error']['text'])
             self.disconnect()
         except IqTimeout:
-            logging.error("No response from server.")
+            print("No response from server.")
             self.disconnect()
