@@ -34,6 +34,22 @@ class Cliente(ClientXMPP):
         print(msg)
         self.mensajes='nuevo Mensaje'
     
+    def deleteAccount(self):
+        resp = self.Iq()
+        resp['type'] = 'set'
+        resp['from'] = self.boundjid.full
+        resp['register']['remove'] = True
+
+        try:
+            resp.send(now=True)
+        except IqError as e:
+            print('Could not unregister account: %s' %
+                          e.iq['error']['text'])
+            self.disconnect()
+        except IqTimeout:
+            print('No response from server.')
+            self.disconnect()
+    
     def enviarMensaje(self,contacto,mensaje):
         print('Enviar mensaje')
         self.sendMessage(mto=contacto,

@@ -3,15 +3,17 @@ import cliente
 
 # Hanldes the client once the user logged in
 def handle_session(event):
+    print(xmpp)
     xmpp.start()
     xmpp.enviarMensaje('dorval@redes2020.xyz','Dorval2020')
+    #xmpp.deleteAccount()
 
 
 
 if __name__ == "__main__":
 
-    username = 'jirafa@redes2020.xyz'
-    password = 'Jirafa2020'
+    username = 'tomas@redes2020.xyz'
+    password = 'Tomas2020'
 
     xmpp = cliente.Cliente(username, password)
 

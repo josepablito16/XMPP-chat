@@ -5,6 +5,7 @@ import Views.Register as Register
 import Views.Home as Home
 import cliente
 import time
+import pickle
 
 
 def print_center(stdscr, text):
@@ -14,6 +15,15 @@ def print_center(stdscr, text):
     y = h//2
     stdscr.addstr(y, x, text)
     stdscr.refresh()
+
+def handle_session(event):
+    print('Entra a handle_session')
+    print(event)
+    print(xmpp)
+    xmpp.start()
+    xmpp.enviarMensaje('dorval@redes2020.xyz','mensaje desde codigo2')
+    time.sleep(5)
+    #xmpp.desconectarse()
 
 
 def main(stdscr):
@@ -83,14 +93,13 @@ def main(stdscr):
 
                 jid=user
                 xmpp = cliente.Cliente(jid,password)
-                xmpp.register_plugin('xep_0030') # Service Discovery
-                xmpp.register_plugin('xep_0199') # XMPP Ping
+                xmpp.add_event_handler("session_start",handle_session, threaded=True)
                 if xmpp.connect(('redes2020.xyz', 5222)):
-                    xmpp.enviarMensaje('dorval@redes2020.xyz','mensaje desde codigo2')
                     xmpp.process(block=False)
+                    #xmpp.enviarMensaje('dorval@redes2020.xyz','mensaje desde codigo2')
                     #time.sleep(20)
                     #xmpp.desconectarse()
-                continue
+                time.sleep(5)
 
             elif key== 27:
                 #? ESC Button
@@ -182,5 +191,6 @@ def main(stdscr):
             Home.print_menu(stdscr, currentRow)
 
 
-
-curses.wrapper(main)
+if __name__ == "__main__":
+    xmpp=None
+    curses.wrapper(main)
