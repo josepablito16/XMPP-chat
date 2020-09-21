@@ -2,7 +2,7 @@ import curses
 
 
 def print_menu(stdscr, selected_row_idx,user,password):
-    menu = ['User: '+str(user), 'Password: '+str('*'*len(password)),'Press ENTER to Log In']
+    menu = ['User: '+str(user), 'Password: '+str('*'*len(password)),'Press ENTER to register']
     stdscr.clear()
     # turn on cursor blinking
     #curses.curs_set(1)

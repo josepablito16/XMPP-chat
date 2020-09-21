@@ -105,7 +105,7 @@ class RegisterBot(sleekxmpp.ClientXMPP):
             logging.info("Account created for %s!" % self.boundjid)
         except IqError as e:
             logging.error("Could not register account: %s" %
-                          e.iq['error']['text'])
+                    e.iq['error']['text'])
             self.disconnect()
         except IqTimeout:
             logging.error("No response from server.")
@@ -148,10 +148,10 @@ if __name__ == '__main__':
     # have interdependencies, the order in which you register them does
     # not matter.
     xmpp = RegisterBot(opts.jid, opts.password)
-    xmpp.register_plugin('xep_0030')  # Service Discovery
-    xmpp.register_plugin('xep_0004')  # Data forms
-    xmpp.register_plugin('xep_0066')  # Out-of-band Data
-    xmpp.register_plugin('xep_0077')  # In-band Registration
+    xmpp.register_plugin('xep_0030') # Service Discovery
+    xmpp.register_plugin('xep_0004') # Data forms
+    xmpp.register_plugin('xep_0066') # Out-of-band Data
+    xmpp.register_plugin('xep_0077') # In-band Registration
 
     # Some servers don't advertise support for inband registration, even
     # though they allow it. If this applies to your server, use:
@@ -165,7 +165,7 @@ if __name__ == '__main__':
     # xmpp.ca_certs = "path/to/ca/cert"
 
     # Connect to the XMPP server and start processing XMPP stanzas.
-    if xmpp.connect(('redes2020.xyz', 5222)):
+    if xmpp.connect():
         # If you do not have the dnspython library installed, you will need
         # to manually specify the name of the server if it does not match
         # the one in the JID. For example, to use Google Talk you would

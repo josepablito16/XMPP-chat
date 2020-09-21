@@ -1,6 +1,8 @@
 import curses
 import Views.Menu as Menu
 import Views.Login as Login
+import Views.Register as Register
+import Views.Home as Home
 from Cliente import *
 import time
 
@@ -17,6 +19,9 @@ def print_center(stdscr, text):
 def main(stdscr):
     # turn off cursor blinking
     curses.curs_set(0)
+
+    # time out to the user imput
+    stdscr.timeout(100)
 
     # color scheme for selected row
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
@@ -48,6 +53,13 @@ def main(stdscr):
                     password=''
                     key=0
                     continue
+                elif(Menu.menu[currentRow]=='Register'):
+                    currentView=2
+                    currentRow=0
+                    user=''
+                    password=''
+                    key=0
+                    continue
                 # if user selected last row, exit the program
                 if currentRow == len(Menu.menu)-1:
                     break
@@ -65,8 +77,9 @@ def main(stdscr):
             elif key == curses.KEY_DOWN and currentRow < 1:
                 currentRow += 1
             elif key == curses.KEY_ENTER or key in [10, 13]:
-                currentView=2
+                currentView=3
                 key=0
+                currentRow=0
 
                 jid=user
                 xmpp = Cliente(jid,password)
@@ -96,15 +109,77 @@ def main(stdscr):
             Login.print_menu(stdscr, currentRow,user,password)
             key = stdscr.getch()
 
-
         elif(currentView==2):
-            if key== 27:
+            #!Register
+            #mvaddch
+            #stdscr.addstr(0, 0,str(key))
+            #stdscr.refresh()
+            if key == curses.KEY_UP and currentRow > 0:
+                currentRow -= 1
+            elif key == curses.KEY_DOWN and currentRow < 1:
+                currentRow += 1
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                key=0
+
+                jid=user
+                xmpp = RegisterClient(jid,password)
+                xmpp.register_plugin('xep_0030')  # Service Discovery
+                xmpp.register_plugin('xep_0004')  # Data forms
+                xmpp.register_plugin('xep_0066')  # Out-of-band Data
+                xmpp.register_plugin('xep_0077')  # In-band Registration
+                xmpp['xep_0077'].force_registration = True
+                if xmpp.connect(('redes2020.xyz', 5222)):
+                    xmpp.process(block=False)
+
+                currentView=0
+                currentRow=0
+                user=''
+                password=''
+                key=0
+                continue
+
+            elif key== 27:
                 #? ESC Button
-                xmpp.desconectarse()
                 break
-            stdscr.addstr(0, 0,str(xmpp.getMensajePrueba()))
-            stdscr.refresh()
+            elif 33<=key<=122:
+                if(currentRow==0):
+                    user+=chr(key)
+                else:
+                    password+=chr(key)
+            elif key==8:
+                if(currentRow==0):
+                    user=user[:-1]
+                else:
+                    password=password[:-1]
+
+            Register.print_menu(stdscr, currentRow,user,password)
             key = stdscr.getch()
+
+        elif(currentView==3):
+            #!Home
+            key = stdscr.getch()
+            
+            if key == curses.KEY_UP and currentRow > 0:
+                currentRow -= 1
+            elif key == curses.KEY_DOWN and currentRow < len(Home.menu)-1:
+                currentRow += 1
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                #print_center(stdscr, "You selected '{}'".format(Menu.menu[currentRow]))
+                #stdscr.getch()
+                if(Home.menu[currentRow]=='Log in'):
+                    currentView=1
+                    currentRow=0
+                    user=''
+                    password=''
+                    key=0
+                    continue
+                
+                # if user selected last row, exit the program
+                if currentRow == len(Home.menu)-1:
+                    xmpp.desconectarse()
+                    break
+
+            Home.print_menu(stdscr, currentRow)
 
 
 
