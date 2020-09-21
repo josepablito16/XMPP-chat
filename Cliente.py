@@ -34,6 +34,52 @@ class Cliente(ClientXMPP):
         print(msg)
         self.mensajes='nuevo Mensaje'
     
+    def getMyContacts(self):
+        try:
+            self.get_roster(block=True)
+        except IqError as err:
+            print('Error: %s' % err.iq['error']['condition'])
+        except IqTimeout:
+            print('Error: Request timed out')
+
+        clientGroups = self.client_roster.groups()
+        for group in clientGroups:
+            for user in clientGroups[group]:
+                
+                # exclude the actual account
+                if user == self.boundjid.bare:
+                    continue
+
+                subscription = self.client_roster[user]['subscription']
+                connections = self.client_roster.presence(user)
+
+                # Get all users connected
+                if connections.items():
+                    for platform, status in connections.items():
+                        
+                        if status['show']:
+                            if(status['show']=='dnd'):
+                                status='busy'
+                            elif(status['show']=='xa'):
+                                status='Not available'
+                            else:
+                                status = status['show']
+                        else:
+                            status = 'available'
+
+                        print()
+                        print(user)
+                        print('\t- Status: '+str(status))
+                        print('\t- Subscription: '+str(subscription))
+                        print('\t- Platform: '+str(platform))
+
+                # Get all users offline
+                else:
+                    print()
+                    print(user)
+                    print('\t- Status: unavailable')
+                    print('\t- Subscription: '+str(subscription))
+    
     def getAllUsers(self):
         # New form to the response
         formResponse = Form()
