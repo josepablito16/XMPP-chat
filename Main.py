@@ -3,9 +3,9 @@ import cliente
 
 # Hanldes the client once the user logged in
 def handle_session(event):
-    print(xmpp)
     xmpp.start()
     xmpp.enviarMensaje('dorval@redes2020.xyz','Dorval2020')
+    xmpp.getAllUsers()
     #xmpp.deleteAccount()
 
 

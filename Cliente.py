@@ -34,6 +34,71 @@ class Cliente(ClientXMPP):
         print(msg)
         self.mensajes='nuevo Mensaje'
     
+    def getAllUsers(self):
+        # New form to the response
+        formResponse = Form()
+        formResponse.set_type('submit')
+
+        formResponse.add_field(
+            var='FORM_TYPE',
+            ftype='hidden',
+            type='hidden',
+            value='jabber:iq:search'
+        )
+
+        formResponse.add_field(
+            var='search',
+            ftype='text-single',
+            type='text-single',
+            label='Search',
+            required=True,
+            value='*'
+        )
+
+        #Only define the username
+        formResponse.add_field(
+            var='Username',
+            ftype='boolean',
+            type='boolean',
+            label='Username',
+            value=1
+        )
+        # Create a iq to search using the form created
+        search = self.Iq()
+        search.set_type('set')
+        search.set_to('search.'+self.boundjid.domain)
+        search.set_from(self.boundjid.full)
+
+        newQuery = ET.Element('{jabber:iq:search}query')
+        newQuery.append(formResponse.xml)
+        search.append(newQuery)
+        results = search.send(now=True, block=True)
+
+        # Convert the string result to structure
+        results = ET.fromstring(str(results))
+        ResultItems = []
+
+        #Iterate the structure to get all the items
+        for child in results:
+            for node in child:
+                for item in node:
+                    ResultItems.append(item)
+
+        usersNames=[]
+        # iterate the result items
+        for item in ResultItems:
+            for field in item.getchildren():
+                try:
+                    if(field.attrib['var']=='Username'):
+                        usersNames.append(field.getchildren()[0].text)
+                except:
+                    continue
+
+        # order alphabetically all the user names
+        sortedUserNames=sorted(usersNames, key=str.lower)
+        for i in range(len(sortedUserNames)) :
+            print(f'{i+1}. {sortedUserNames[i]}')
+
     def deleteAccount(self):
         resp = self.Iq()
         resp['type'] = 'set'
