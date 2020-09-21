@@ -3,7 +3,7 @@ import Views.Menu as Menu
 import Views.Login as Login
 import Views.Register as Register
 import Views.Home as Home
-from Cliente import *
+import cliente
 import time
 
 
@@ -82,7 +82,7 @@ def main(stdscr):
                 currentRow=0
 
                 jid=user
-                xmpp = Cliente(jid,password)
+                xmpp = cliente.Cliente(jid,password)
                 xmpp.register_plugin('xep_0030') # Service Discovery
                 xmpp.register_plugin('xep_0199') # XMPP Ping
                 if xmpp.connect(('redes2020.xyz', 5222)):
@@ -122,7 +122,7 @@ def main(stdscr):
                 key=0
 
                 jid=user
-                xmpp = RegisterClient(jid,password)
+                xmpp = cliente.RegisterClient(jid,password)
                 xmpp.register_plugin('xep_0030')  # Service Discovery
                 xmpp.register_plugin('xep_0004')  # Data forms
                 xmpp.register_plugin('xep_0066')  # Out-of-band Data

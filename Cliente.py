@@ -1,79 +1,61 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-    SleekXMPP: The Sleek XMPP Library
-    Copyright (C) 2010  Nathanael C. Fritz
-    This file is part of SleekXMPP.
-
-    See the file LICENSE for copying permission.
-"""
-import sleekxmpp
-import curses
+from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError, IqTimeout
-
+from xml.etree import cElementTree as ET
 from sleekxmpp.plugins.xep_0004.stanza.field import FormField, FieldOption
 from sleekxmpp.plugins.xep_0004.stanza.form import Form
 from sleekxmpp.plugins.xep_0047.stream import IBBytestream
-from sleekxmpp import ClientXMPP
 
-class Cliente(sleekxmpp.ClientXMPP):
+
+class Cliente(ClientXMPP):
 
     def __init__(self, jid, password):
-        sleekxmpp.ClientXMPP.__init__(self, jid, password)
-        self.mensajes='Nada'
+
+        ClientXMPP.__init__(self, jid, password)
         self.auto_authorize = True
         self.auto_subscribe = True
-        # The session_start event will be triggered when
-        # the bot establishes its connection with the server
-        # and the XML streams are ready for use. We want to
-        # listen for this event so that we we can initialize
-        # our roster.
-        self.add_event_handler("session_start", self.start, threaded=True)
+
         self.add_event_handler("message", self.mensajeNuevo)
-        
+
+        self.register_plugin('xep_0030')
+        self.register_plugin('xep_0004')
+        self.register_plugin('xep_0066')
+        self.register_plugin('xep_0077')
+        self.register_plugin('xep_0050')
+        self.register_plugin('xep_0047')
+        self.register_plugin('xep_0231')
+        self.register_plugin('xep_0045')
+        self.register_plugin('xep_0095')  # Offer and accept a file transfer
+        self.register_plugin('xep_0096')  # Request file transfer intermediate
+        self.register_plugin('xep_0047')  # Bytestreams
+
+        self['xep_0077'].force_registration = True
+    
     def mensajeNuevo(self,msg):
         print(msg)
         self.mensajes='nuevo Mensaje'
-    
-    def nada(self,param):
-        pass
-    
-    def getMensajePrueba(self):
-        return self.mensajes
-    
-
-    def desconectarse(self):
-        # Using wait=True ensures that the send queue will be
-        # emptied before ending the session.
-        print('Entra al metodo')
-        self.disconnect()
-        print('Cierra sesion')
-    
-    def register(self, iq): 
-        resp = self.Iq()
-        resp['type'] = 'set'
-        resp['register']['username'] = self.boundjid.user
-        resp['register']['password'] = self.password
-        resp.send(now=True)
-
     
     def enviarMensaje(self,contacto,mensaje):
         print('Enviar mensaje')
         self.sendMessage(mto=contacto,
                           mbody=mensaje,
                           mtype='chat')
+    
+    def desconectarse(self):
+        # Using wait=True ensures that the send queue will be
+        # emptied before ending the session.
+        print('Entra al metodo')
+        self.disconnect()
+        print('Cierra sesion')
 
-    def start(self, event):
+    def start(self):
+        print('Start')
         self.send_presence()
         self.get_roster()
 
-
-
-class RegisterClient(sleekxmpp.ClientXMPP):
+class RegisterClient(ClientXMPP):
 
     def __init__(self, jid, password):
-        sleekxmpp.ClientXMPP.__init__(self, jid, password)
+        ClientXMPP.__init__(self, jid, password)
 
         # The session_start event will be triggered when
         # the bot establishes its connection with the server
