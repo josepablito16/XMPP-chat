@@ -34,6 +34,11 @@ class Cliente(ClientXMPP):
         print(msg)
         self.mensajes='nuevo Mensaje'
     
+    def addSubscription(self,user):
+        self.send_presence_subscription(pto=user,
+                                        ptype='subscribe',
+                                        pfrom=self.boundjid.bare)
+    
     def getMyContacts(self):
         try:
             self.get_roster(block=True)

@@ -27,13 +27,21 @@ def handle_session(event):
 					Menus.printMyusersMenu()
 					xmpp.getMyContacts()
 					input('\nPress Enter to continue...')
-				elif(userInput=='4'):
+				elif(userInput=='2'):
+					#? Subscribe to user
+					os.system(BORRAR)
+					user=Menus.printAddUserMenu()
+					xmpp.addSubscription(user)
+				elif(userInput=='3'):
+					#? search contact
+					pass
+				elif(userInput=='40'):
 					#? Delete account
 					xmpp.deleteAccount()
 					print('Account deleted!')
 					time.sleep(1)
 					break
-				elif(userInput=='5'):
+				elif(userInput=='69'):
 					break
 		except TimeoutOccurred:
 			continue

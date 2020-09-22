@@ -5,20 +5,22 @@ import cliente
 def handle_session(event):
     xmpp.start()
     #xmpp.enviarMensaje('dorval@redes2020.xyz','Dorval2020')
-    xmpp.getAllUsers()
+    #xmpp.getAllUsers()
     #xmpp.getMyContacts()
+    xmpp.addSubscription('tomas@redes2020.xyz')
     #xmpp.deleteAccount()
 
 
 
 if __name__ == "__main__":
 
-    username = 'tomas@redes2020.xyz'
-    password = 'Tomas2020'
+    #username = 'tomas@redes2020.xyz'
+    #password = 'Tomas2020'
 
     #username = 'dorval@redes2020.xyz'
     #password = 'Dorval2020'
-
+    username ='jirafa@redes2020.xyz'
+    password ='Jirafa2020'
     xmpp = cliente.Cliente(username, password)
 
     xmpp.add_event_handler("session_start", handle_session, threaded=True)

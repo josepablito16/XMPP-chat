@@ -32,7 +32,7 @@ def validarInputMenuInicial(userInput):
 def validarInputHome(userInput):
     try:
         userInput=int(userInput)
-        if(1<=userInput<=5):
+        if(1<=userInput<=69):
             return 1
         else:
             print('Invalid Option!')
@@ -50,6 +50,21 @@ def printMenuLogIn():
     user=input("Enter your user name: ")
     password=input("Enter your password: ")
     return user,password
+
+def printAddUserMenu():
+    while 1:
+        print("******************")
+        print("***  Add User  ***")
+        print("******************")
+        user=input("Enter user name: ")
+ 
+        if('@' not in user):
+            print('User without domain!')
+        else:
+            return user
+
+        time.sleep(2)
+        os.system(BORRAR)
 
 def printAllusersMenu():
     print("*****************************")
@@ -71,9 +86,10 @@ def printHomeMenu():
     print("")
     print("1. Show all users")
     print("2. Add user")
-    print("3. Inbox")
-    print("4. Delete account")
-    print("5. Exit")
+    print("3. Search contact")
+    print("4. Inbox")
+    print("40. Delete account")
+    print("69. Exit")
 
 def printMenuRegister():
     while 1:
