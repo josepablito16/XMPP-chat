@@ -54,10 +54,14 @@ def handle_session(event):
 						os.system(BORRAR)
 						xmpp.updateInboxContacts()
 						
-						cliente.inbox[userInput].printChat()
 						Menus.printMenuChat(userInput)
+						cliente.inbox[userInput].printChat()
 						while 1:
-							chatInput=input('> ')
+							try:
+								chatInput=inputimeout(prompt='> ', timeout=10)
+							except TimeoutOccurred:
+								chatInput=""
+
 							sys.stdout.write(moveUp(1))
 							sys.stdout.write(cleanLine())
 							sys.stdout.flush()
