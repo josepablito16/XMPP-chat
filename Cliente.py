@@ -38,6 +38,58 @@ class Cliente(ClientXMPP):
         self.send_presence_subscription(pto=user,
                                         ptype='subscribe',
                                         pfrom=self.boundjid.bare)
+
+    def getContact(self,userSearch):
+        try:
+            self.get_roster(block=True)
+        except IqError as err:
+            print('Error: %s' % err.iq['error']['condition'])
+        except IqTimeout:
+            print('Error: Request timed out')
+
+        clientGroups = self.client_roster.groups()
+        for group in clientGroups:
+            for user in clientGroups[group]:
+                
+                # exclude the actual account
+                if user == self.boundjid.bare:
+                    continue
+
+                subscription = self.client_roster[user]['subscription']
+                connections = self.client_roster.presence(user)
+
+                # Get all users connected
+                if connections.items():
+                    for platform, status in connections.items():
+                        
+                        if status['show']:
+                            if(status['show']=='dnd'):
+                                status='busy'
+                            elif(status['show']=='xa'):
+                                status='Not available'
+                            else:
+                                status = status['show']
+                        else:
+                            status = 'available'
+
+                        if(userSearch==user):
+                            print()
+                            print(user)
+                            print('\t- Status: '+str(status))
+                            print('\t- Subscription: '+str(subscription))
+                            print('\t- Platform: '+str(platform))
+                            return 
+
+                # Get all users offline
+                else:
+                    if(userSearch==user):
+                        print()
+                        print(user)
+                        print('\t- Status: unavailable')
+                        print('\t- Subscription: '+str(subscription))
+                        break
+        print('User not found!')
+    
     
     def getMyContacts(self):
         try:

@@ -66,6 +66,22 @@ def printAddUserMenu():
         time.sleep(2)
         os.system(BORRAR)
 
+def printSearchContact():
+    while 1:
+        print("***********************")
+        print("***  Search contact  ***")
+        print("************************")
+        user=input("Enter user name: ")
+ 
+        if('@' not in user):
+            print('User without domain!')
+        else:
+            return user
+
+        time.sleep(2)
+        os.system(BORRAR)
+
+
 def printAllusersMenu():
     print("*****************************")
     print("***  redes2020.xyz Users  ***")

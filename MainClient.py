@@ -34,7 +34,10 @@ def handle_session(event):
 					xmpp.addSubscription(user)
 				elif(userInput=='3'):
 					#? search contact
-					pass
+					os.system(BORRAR)
+					user=Menus.printSearchContact()
+					xmpp.getContact(user)
+					input('\nPress Enter to continue...')
 				elif(userInput=='40'):
 					#? Delete account
 					xmpp.deleteAccount()
