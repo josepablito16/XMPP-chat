@@ -51,6 +51,17 @@ def printMenuLogIn():
     password=input("Enter your password: ")
     return user,password
 
+def printAllusersMenu():
+    print("*****************************")
+    print("***  redes2020.xyz Users  ***")
+    print("*****************************")
+
+def printMyusersMenu():
+    print("*********************")
+    print("***  My contacts  ***")
+    print("*********************")
+
+
 def printHomeMenu():
     print("*******************")
     print("***  Main Menu  ***")

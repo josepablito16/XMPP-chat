@@ -18,7 +18,15 @@ def handle_session(event):
 				time.sleep(1)
 				if(userInput=='1'):
 					#? show all users
-					pass
+					os.system(BORRAR)
+					Menus.printAllusersMenu()
+					xmpp.getAllUsers()
+					input('\nPress Enter to continue...')
+					os.system(BORRAR)
+
+					Menus.printMyusersMenu()
+					xmpp.getMyContacts()
+					input('\nPress Enter to continue...')
 				elif(userInput=='4'):
 					#? Delete account
 					xmpp.deleteAccount()
@@ -55,8 +63,8 @@ if __name__ == "__main__":
 				os.system(BORRAR)
 				print('Log in')
 				#user,password=Menus.printMenuLogIn()
-				#user,password='tomas@redes2020.xyz','Tomas2020'
-				user,password='jode2@redes2020.xyz','Jode2020'
+				user,password='tomas@redes2020.xyz','Tomas2020'
+				#user,password='jode2@redes2020.xyz','Jode2020'
 				xmpp = cliente.Cliente(user,password)
 				xmpp.add_event_handler("session_start",handle_session, threaded=True)
 				if xmpp.connect(('redes2020.xyz', 5222)):
