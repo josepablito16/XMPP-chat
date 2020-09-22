@@ -2,8 +2,13 @@ import time
 import cliente
 import Menus
 import os
+import sys
 import platform
 from inputimeout import inputimeout, TimeoutOccurred
+
+moveUp=lambda n:u"\u001b["+str(n)+"A"
+
+cleanLine=lambda :u"\u001b["+str(2)+"K"
 
 # Hanldes the client once the user logged in
 def handle_session(event):
@@ -38,6 +43,33 @@ def handle_session(event):
 					user=Menus.printSearchContact()
 					xmpp.getContact(user)
 					input('\nPress Enter to continue...')
+				elif(userInput=='4'):
+					#? Inbox
+					os.system(BORRAR)
+					userInput,control=Menus.printInboxMenu(xmpp.getListOfContact())
+					if(userInput!=-100):
+						print(userInput)
+						if(control):
+							xmpp.updateInbox(userInput)
+						os.system(BORRAR)
+						xmpp.updateInboxContacts()
+						
+						cliente.inbox[userInput].printChat()
+						Menus.printMenuChat(userInput)
+						while 1:
+							chatInput=input('> ')
+							sys.stdout.write(moveUp(1))
+							sys.stdout.write(cleanLine())
+							sys.stdout.flush()
+							if(chatInput=='exit()'):
+								break
+							if(chatInput!=''):
+								xmpp.enviarMensaje(userInput,chatInput)
+								cliente.inbox[userInput].newMessage('Me',chatInput)
+							
+
+							cliente.inbox[userInput].printUntracked()
+
 				elif(userInput=='40'):
 					#? Delete account
 					xmpp.deleteAccount()

@@ -107,6 +107,42 @@ def printHomeMenu():
     print("40. Delete account")
     print("69. Exit")
 
+def printMenuChat(user):
+    user=user[:user.find('@')]
+    print("*********************")
+    print("***  "+user+" Chat  ***")
+    print("*********************")
+
+def printInboxMenu(contacts):
+    while 1:
+        print("********************")
+        print("***  Inbox Menu  ***")
+        print("********************")
+        for i in range(len(contacts)):
+            print(f"{i+1}. {contacts[i]}")
+        print(f"{len(contacts)+1}. Other")
+        print(f"{len(contacts)+2}. Exit")
+
+        userInput=input("Enter option: ")
+
+        try:
+            print(userInput)
+            if(1<=int(userInput)<=len(contacts)+2):
+                print('todo bien')
+                if(int(userInput)==len(contacts)+2):
+                    return -100, False
+                if(int(userInput)==len(contacts)+1):
+                    usuario=input('Ingrese el usuario: ')
+                    return usuario, True
+                return contacts[int(userInput)-1], False
+            else:
+                print('Invalid input!')
+        except:
+            print('Only numbers please!')
+
+        time.sleep(2)
+        os.system(BORRAR)
+
 def printMenuRegister():
     while 1:
         print("**************************")

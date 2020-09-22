@@ -18,6 +18,8 @@ def handle_session(event):
     print(cliente.inbox)
     xmpp.updateInboxContacts()
     print(cliente.inbox)
+    print(xmpp.getListOfContact())
+    '''
     os.system('cls')
     cliente.inbox['dorval@redes2020.xyz'].printChat()
     while 1:
@@ -28,13 +30,14 @@ def handle_session(event):
         if(userInput=='exit()'):
             break
         if(userInput!=''):
-            xmpp.enviarMensaje('dorval@redes2020.xyz',userInput)
+            xmpp.enviarMensaje('josepa@redes2020.xyz',userInput)
             cliente.inbox['dorval@redes2020.xyz'].newMessage('Jose',userInput)
         
 
         cliente.inbox['dorval@redes2020.xyz'].printUntracked()
 
     #xmpp.deleteAccount()
+    '''
     xmpp.desconectarse()
 
 

@@ -112,6 +112,36 @@ class Cliente(ClientXMPP):
 				# Get all users offline
 				else:
 					self.updateInbox(user)
+	
+	def getListOfContact(self):
+		contactList=[]
+		try:
+			self.get_roster(block=True)
+		except IqError as err:
+			print('Error: %s' % err.iq['error']['condition'])
+		except IqTimeout:
+			print('Error: Request timed out')
+
+		clientGroups = self.client_roster.groups()
+		for group in clientGroups:
+			for user in clientGroups[group]:
+				
+				# exclude the actual account
+				if user == self.boundjid.bare:
+					continue
+
+				subscription = self.client_roster[user]['subscription']
+				connections = self.client_roster.presence(user)
+
+				# Get all users connected
+				if connections.items():
+					for platform, status in connections.items():	
+						contactList.append(user)
+
+				# Get all users offline
+				else:
+					contactList.append(user)
+		return contactList
 
 	def getContact(self,userSearch):
 		try:
