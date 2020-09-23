@@ -73,7 +73,11 @@ def handle_session(event):
 							
 
 							cliente.inbox[userInput].printUntracked()
-
+				elif(userInput=='8'):
+					#? Change presence message and status
+					os.system(BORRAR)
+					status,presence=Menus.printMenuPresence()
+					xmpp.SendPresenceMessage(status,presence)
 				elif(userInput=='40'):
 					#? Delete account
 					xmpp.deleteAccount()

@@ -104,6 +104,10 @@ def printHomeMenu():
     print("2. Add user")
     print("3. Search contact")
     print("4. Inbox")
+    print("5. Create a group")
+    print("6. Join a group")
+    print("7. Group chat")
+    print("8. Change presence message and status")
     print("40. Delete account")
     print("69. Exit")
 
@@ -112,6 +116,39 @@ def printMenuChat(user):
     print("*********************")
     print("***  "+user+" Chat  ***")
     print("*********************")
+
+def printMenuPresence():
+    status={
+        1:'available',
+        2:'away',
+        3:'dnd',
+        4:'xa',
+    }
+    while 1:
+        print("***********************")
+        print("***  Change status  ***")
+        print("***********************")
+        print("1. Available")
+        print("2. Away")
+        print("3. Busy")
+        print("4. Not available")
+        statusIndex=input("Enter new status: ")
+
+        try:
+            if(1<=int(statusIndex)<=4):
+                presence=input('Enter the presence message: ')
+                return status[int(statusIndex)],presence
+            else:
+                print('Invalid Option!')
+                time.sleep(2)
+                os.system(BORRAR)
+                continue
+        except:
+            print('Only numbers please!')
+
+        time.sleep(2)
+        os.system(BORRAR)
+
 
 def printInboxMenu(contacts):
     while 1:

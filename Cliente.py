@@ -83,6 +83,9 @@ class Cliente(ClientXMPP):
 	def updateInbox(self,user):
 		if(user not in inbox):
 			inbox[user]=Chat()
+	
+	def SendPresenceMessage(self,newPresence,newStatus):
+		self.send_presence(pshow=newPresence, pstatus=newStatus)
 
 	def updateInboxContacts(self):
 		try:

@@ -19,6 +19,12 @@ def handle_session(event):
     xmpp.updateInboxContacts()
     print(cliente.inbox)
     print(xmpp.getListOfContact())
+    #available
+    #away
+    #dnd
+    #xa
+    xmpp.SendPresenceMessage('xa','que onda')
+    time.sleep(5)
     '''
     os.system('cls')
     cliente.inbox['dorval@redes2020.xyz'].printChat()
