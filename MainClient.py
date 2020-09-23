@@ -16,7 +16,10 @@ def handle_session(event):
 	while 1:
 		os.system(BORRAR)
 		try:
-			Menus.printHomeMenu()
+			if(len(xmpp.notifications)>0):
+				Menus.printHomeMenu(xmpp.notifications.pop(0))
+			else:
+				Menus.printHomeMenu()
 			userInput = inputimeout(prompt='>>', timeout=5)
 			if(Menus.validarInputHome(userInput)):
 				print('sin errores')

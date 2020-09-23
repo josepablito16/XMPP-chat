@@ -15,16 +15,16 @@ def handle_session(event):
     #xmpp.getMyContacts()
     #xmpp.addSubscription('tomas@redes2020.xyz')
     #xmpp.getContact('dorval2@redes2020.xyz')
-    print(cliente.inbox)
-    xmpp.updateInboxContacts()
-    print(cliente.inbox)
-    print(xmpp.getListOfContact())
+    #print(cliente.inbox)
+    #xmpp.updateInboxContacts()
+    #print(cliente.inbox)
+    #print(xmpp.getListOfContact())
     #available
     #away
     #dnd
     #xa
-    xmpp.SendPresenceMessage('xa','que onda')
-    time.sleep(5)
+    #xmpp.SendPresenceMessage('xa','que onda')
+    time.sleep(50)
     '''
     os.system('cls')
     cliente.inbox['dorval@redes2020.xyz'].printChat()

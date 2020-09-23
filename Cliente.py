@@ -51,7 +51,13 @@ class Cliente(ClientXMPP):
 		self.auto_authorize = True
 		self.auto_subscribe = True
 
+		self.notifications=[]
+
 		self.add_event_handler("message", self.mensajeNuevo)
+		self.add_event_handler("got_online", self.gotOnline)
+		self.add_event_handler("got_offline", self.gotOffline)
+		self.add_event_handler('changed_status', self.changedStatus)
+		
 
 		self.register_plugin('xep_0030')
 		self.register_plugin('xep_0004')
@@ -73,7 +79,32 @@ class Cliente(ClientXMPP):
 		#print(userFrom[:userFrom.find('@')])
 		#print(msg['body'])
 		inbox[userFrom[:userFrom.find('/')]].newMessage(userFrom[:userFrom.find('@')],str(msg['body']))
-		self.mensajes='nuevo Mensaje'
+		self.notifications.append('message from '+userFrom[:userFrom.find('@')])
+	
+	
+	def changedStatus(self,msg):
+		statusDict={
+        "":'available',
+        'away':'away',
+        'dnd':'Busy',
+        'xa':'Not available'}
+		user=str(msg['from'])
+		newStatus=str(msg['show'])
+		if(user!=self.boundjid.full):
+			self.notifications.append(user[:user.find('@')]+' is '+statusDict[newStatus])
+	
+	
+	def gotOffline(self,msg):
+		#print(msg)
+		user=str(msg['from'])
+		if(user!=self.boundjid.full):
+			self.notifications.append(user[:user.find('@')]+' is offline')
+	
+	def gotOnline(self,msg):
+		user=str(msg['from'])
+		if(user!=self.boundjid.full):
+			#print(msg)
+			self.notifications.append(user[:user.find('@')]+' is online')
 	
 	def addSubscription(self,user):
 		self.send_presence_subscription(pto=user,
@@ -326,7 +357,7 @@ class Cliente(ClientXMPP):
 			self.disconnect()
 	
 	def enviarMensaje(self,contacto,mensaje):
-		print('Enviar mensaje')
+		#print('Enviar mensaje')
 		self.sendMessage(mto=contacto,
 						  mbody=mensaje,
 						  mtype='chat')
@@ -334,14 +365,15 @@ class Cliente(ClientXMPP):
 	def desconectarse(self):
 		# Using wait=True ensures that the send queue will be
 		# emptied before ending the session.
-		print('Entra al metodo')
+		#print('Entra al metodo')
 		self.disconnect()
-		print('Cierra sesion')
+		#print('Cierra sesion')
 
 	def start(self):
-		print('Start')
+		print('Loading...')
 		self.send_presence()
 		self.get_roster()
+		self.updateInboxContacts()
 
 class RegisterClient(ClientXMPP):
 

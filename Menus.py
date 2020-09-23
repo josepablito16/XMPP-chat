@@ -93,12 +93,15 @@ def printMyusersMenu():
     print("*********************")
 
 
-def printHomeMenu():
+def printHomeMenu(notification=None):
     print("*******************")
     print("***  Main Menu  ***")
     print("*******************")
     print()
-    #print("[*] Nuevo mensaje de Jorge")
+    if(notification):
+        print("[*] "+notification)
+    else:
+        print("")
     print("")
     print("1. Show all users")
     print("2. Add user")
