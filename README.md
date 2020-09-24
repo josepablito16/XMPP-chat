@@ -4,6 +4,7 @@
 * [Project description](#project-description)
 * [Features](#features)
 * [Installation](#installation)
+* [Important files](#important-files)
 * [Util references](#sleekxmpp-references)
 * [How to use?](#how-to-use?)
 * [Credits](#credits)
@@ -45,6 +46,11 @@ $ activate.bat
 $ cd ../..
 $ pip install -r requirements.txt
 ```
+
+## Important files
+* `MainClient.py`: terminal interface logic
+* `Menus.py` : graphical console interaction
+* `client.py`: all code related to the XMPP client
 
 ## SleekXMPP references 
 [SleekXMPP Documentation](https://sleekxmpp.readthedocs.io/en/latest/index.html)
