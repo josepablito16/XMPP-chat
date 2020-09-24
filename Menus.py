@@ -99,7 +99,7 @@ def printHomeMenu(notification=None):
     print("*******************")
     print()
     if(notification):
-        print("[*] "+notification)
+        print(u"\u001b[1m\u001b[31m●\u001b[0m "+notification)
     else:
         print("")
     print("")
@@ -107,12 +107,9 @@ def printHomeMenu(notification=None):
     print("2. Add user")
     print("3. Search contact")
     print("4. Inbox")
-    print("5. Create a group")
-    print("6. Join a group")
-    print("7. Group chat")
-    print("8. Change presence message and status")
-    print("40. Delete account")
-    print("69. Exit")
+    print("5. Change presence message and status")
+    print("6. Delete account")
+    print("7. Exit")
 
 def printMenuChat(user):
     user=user[:user.find('@')]
@@ -159,7 +156,11 @@ def printInboxMenu(contacts):
         print("***  Inbox Menu  ***")
         print("********************")
         for i in range(len(contacts)):
-            print(f"{i+1}. {contacts[i]}")
+            if(contacts[i][1]):
+                print(f"{i+1}. {contacts[i][0]}"+u"\u001b[1m\u001b[31m ●\u001b[0m")
+            else:
+                print(f"{i+1}. {contacts[i][0]}")
+
         print(f"{len(contacts)+1}. Other")
         print(f"{len(contacts)+2}. Exit")
 
@@ -174,7 +175,7 @@ def printInboxMenu(contacts):
                 if(int(userInput)==len(contacts)+1):
                     usuario=input('Ingrese el usuario: ')
                     return usuario, True
-                return contacts[int(userInput)-1], False
+                return contacts[int(userInput)-1][0], False
             else:
                 print('Invalid input!')
         except:

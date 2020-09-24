@@ -11,7 +11,7 @@ moveUp=lambda n:u"\u001b["+str(n)+"A"
 cleanLine=lambda :u"\u001b["+str(2)+"K"
 
 # Hanldes the client once the user logged in
-def handle_session(event):
+def handleSession(event):
 	xmpp.start()
 	while 1:
 		os.system(BORRAR)
@@ -20,9 +20,8 @@ def handle_session(event):
 				Menus.printHomeMenu(xmpp.notifications.pop(0))
 			else:
 				Menus.printHomeMenu()
-			userInput = inputimeout(prompt='>>', timeout=5)
+			userInput = inputimeout(prompt='> ', timeout=5)
 			if(Menus.validarInputHome(userInput)):
-				print('sin errores')
 				time.sleep(1)
 				if(userInput=='1'):
 					#? show all users
@@ -76,24 +75,27 @@ def handle_session(event):
 							
 
 							cliente.inbox[userInput].printUntracked()
-				elif(userInput=='8'):
+				elif(userInput=='5'):
 					#? Change presence message and status
 					os.system(BORRAR)
 					status,presence=Menus.printMenuPresence()
 					xmpp.SendPresenceMessage(status,presence)
-				elif(userInput=='40'):
+				elif(userInput=='6'):
 					#? Delete account
 					xmpp.deleteAccount()
 					print('Account deleted!')
 					time.sleep(1)
 					break
-				elif(userInput=='69'):
+				elif(userInput=='7'):
+					os.system(BORRAR)
+					print('Loading...')
 					break
 		except TimeoutOccurred:
 			continue
 		
 	#xmpp.enviarMensaje('dorval@redes2020.xyz','Dorval2020')
 	xmpp.desconectarse()
+	os.system(BORRAR)
 	#xmpp.deleteAccount()
 
 
@@ -108,26 +110,25 @@ if __name__ == "__main__":
 		# Clear the screen.
 		os.system(BORRAR)
 		Menus.printMenuInicial()
-		userInput=input('>>')
+		userInput=input('> ')
 		print(userInput)
 		if(Menus.validarInputMenuInicial(userInput)):
 			# No hay errores
 			if(userInput=='1'):
 				#!Log in
 				os.system(BORRAR)
-				print('Log in')
 				#user,password=Menus.printMenuLogIn()
 				user,password='tomas@redes2020.xyz','Tomas2020'
 				#user,password='jode2@redes2020.xyz','Jode2020'
 				xmpp = cliente.Cliente(user,password)
-				xmpp.add_event_handler("session_start",handle_session, threaded=True)
+				xmpp.add_event_handler("session_start",handleSession, threaded=True)
 				if xmpp.connect(('redes2020.xyz', 5222)):
 					xmpp.process(block=False)
+					print('Loading...')
 					break
 			elif(userInput=='2'):
 				#!Register
 				os.system(BORRAR)
-				print('Register')
 				user,password=Menus.printMenuRegister()
 				xmpp = cliente.RegisterClient(user,password)
 				xmpp.register_plugin('xep_0030')  # Service Discovery
@@ -141,21 +142,5 @@ if __name__ == "__main__":
 				time.sleep(2)
 			elif(userInput=='3'):
 				#!Exit
-				print('Exit')
+				os.system(BORRAR)
 				break
-		print('Que pasa')
-			
-	'''
-	username = 'tomas@redes2020.xyz'
-	password = 'Tomas2020'
-
-	xmpp = cliente.Cliente(username, password)
-
-	xmpp.add_event_handler("session_start", handle_session, threaded=True)
-	if xmpp.connect(('redes2020.xyz', 5222)):
-		xmpp.process(block=False)
-		time.sleep(5)
-		xmpp.desconectarse()
-	else:
-		xmpp.desconectarse()
-	'''

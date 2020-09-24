@@ -1,3 +1,9 @@
+'''
+	Author: Jose Cifuentes
+	This script contains all related
+	to de xmpp client, for example, chat class,
+	message class and client class
+'''
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError, IqTimeout
 from xml.etree import cElementTree as ET
@@ -5,38 +11,53 @@ from sleekxmpp.plugins.xep_0004.stanza.field import FormField, FieldOption
 from sleekxmpp.plugins.xep_0004.stanza.form import Form
 from sleekxmpp.plugins.xep_0047.stream import IBBytestream
 
+'''
+	Structure that saves all
+	the chats:
+		User: [Messages]
+'''
 inbox={}
 class Chat(object):
+	""" Saves all the messages of a conversation"""
 	def __init__(self):
-		self.chat=[]
-		self.untracked=[]
+		self.chat=[] # All the chat
+		self.untracked=[] # The messages that not are printed
 
+	# Add a new message to the array
+	# user: the user that send the message
+	# message: the message sended
 	def newMessage(self,user,message):
 		self.chat.append(Message(user,message))
 		self.untracked.append(Message(user,message))
 
+	# Prints all the message untracked and clean the untracked array
 	def printUntracked(self):
 		for i in self.untracked:
 			print(i.getMensaje())
 		self.untracked=[]
 
+	# returns if the chat is untracked
 	def isUntracked(self):
 		return len(self.untracked)!=0
 
+	# prints all the chat and clean the untracked array
 	def printChat(self):
 		self.untracked=[]
 		for i in self.chat:
 			print(i.getMensaje())
 
+	# print the last message
 	def printLastMessage(self):
 		print(self.chat[-1].getMensaje())
 
 
 class Message(object):
 	def __init__(self,user,message):
-		self.user=user
-		self.message=message
+		self.user=user # user that send the message
+		self.message=message 
 
+	# return the message to print, for example,
+	#	Jose: Hello!
 	def getMensaje(self):
 		return self.user+": "+self.message
 
@@ -44,44 +65,42 @@ class Message(object):
 
 
 class Cliente(ClientXMPP):
-
+	""""All the interaction to the xmpp server"""
 	def __init__(self, jid, password):
 
 		ClientXMPP.__init__(self, jid, password)
+		# authorize automatically subscriptions
 		self.auto_authorize = True
 		self.auto_subscribe = True
 
+		# Array that saves all the notifications, for example
+		# new messages, when a user got online, etc
 		self.notifications=[]
 
-		self.add_event_handler("message", self.mensajeNuevo)
-		self.add_event_handler("got_online", self.gotOnline)
-		self.add_event_handler("got_offline", self.gotOffline)
-		self.add_event_handler('changed_status', self.changedStatus)
+		self.add_event_handler("message", self.mensajeNuevo) # event that handle when receive a new message
+		self.add_event_handler("got_online", self.gotOnline) # event that handle when a user got online
+		self.add_event_handler("got_offline", self.gotOffline) # event that handle when a user got off line
+		self.add_event_handler('changed_status', self.changedStatus) # event that handle when a user change his status
 		
 
-		self.register_plugin('xep_0030')
-		self.register_plugin('xep_0004')
+		self.register_plugin('xep_0030') # Service Discovery
+		self.register_plugin('xep_0004') # Data Forms
 		self.register_plugin('xep_0066')
-		self.register_plugin('xep_0077')
+		self.register_plugin('xep_0077') # In-Band Registration
 		self.register_plugin('xep_0050')
 		self.register_plugin('xep_0047')
 		self.register_plugin('xep_0231')
-		self.register_plugin('xep_0045')
-		self.register_plugin('xep_0095')  # Offer and accept a file transfer
-		self.register_plugin('xep_0096')  # Request file transfer intermediate
-		self.register_plugin('xep_0047')  # Bytestreams
+		self.register_plugin('xep_0045') # Multi-User Chat
 
 		self['xep_0077'].force_registration = True
 	
 	def mensajeNuevo(self,msg):
 		userFrom=str(msg['from'])
-		#print(userFrom[:userFrom.find('/')])
-		#print(userFrom[:userFrom.find('@')])
-		#print(msg['body'])
 		inbox[userFrom[:userFrom.find('/')]].newMessage(userFrom[:userFrom.find('@')],str(msg['body']))
 		self.notifications.append('message from '+userFrom[:userFrom.find('@')])
 	
-	
+	# Add to notification array when a user chage the status
+	# msg is the data thtat provides the server
 	def changedStatus(self,msg):
 		statusDict={
         "":'available',
@@ -93,28 +112,26 @@ class Cliente(ClientXMPP):
 		if(user!=self.boundjid.full):
 			self.notifications.append(user[:user.find('@')]+' is '+statusDict[newStatus])
 	
-	
+	# Add to notification array when a user got off line
+	# msg is the data thtat provides the server
 	def gotOffline(self,msg):
-		#print(msg)
 		user=str(msg['from'])
 		if(user!=self.boundjid.full):
 			self.notifications.append(user[:user.find('@')]+' is offline')
-	
+
+	# Add to notification array when a user got online
+	# msg is the data thtat provides the server
 	def gotOnline(self,msg):
 		user=str(msg['from'])
 		if(user!=self.boundjid.full):
-			#print(msg)
 			self.notifications.append(user[:user.find('@')]+' is online')
 	
-	def addSubscription(self,user):
-		self.send_presence_subscription(pto=user,
-										ptype='subscribe',
-										pfrom=self.boundjid.bare)
-					
+	# Update the inbox structure
 	def updateInbox(self,user):
 		if(user not in inbox):
 			inbox[user]=Chat()
 	
+	# Send the presence message and status to the server
 	def SendPresenceMessage(self,newPresence,newStatus):
 		self.send_presence(pshow=newPresence, pstatus=newStatus)
 
@@ -147,6 +164,7 @@ class Cliente(ClientXMPP):
 				else:
 					self.updateInbox(user)
 	
+	# return all the contacts in a list
 	def getListOfContact(self):
 		contactList=[]
 		try:
@@ -170,13 +188,16 @@ class Cliente(ClientXMPP):
 				# Get all users connected
 				if connections.items():
 					for platform, status in connections.items():	
-						contactList.append(user)
+						contactList.append([user,inbox[user].isUntracked()])
+						
 
 				# Get all users offline
 				else:
-					contactList.append(user)
+					contactList.append([user,inbox[user].isUntracked()])
+				
 		return contactList
 
+	# print the info of a user
 	def getContact(self,userSearch):
 		try:
 			self.get_roster(block=True)
@@ -228,7 +249,7 @@ class Cliente(ClientXMPP):
 						break
 		print('User not found!')
 	
-	
+	# prints all the contacts
 	def getMyContacts(self):
 		try:
 			self.get_roster(block=True)
@@ -275,6 +296,7 @@ class Cliente(ClientXMPP):
 					print('\t- Status: unavailable')
 					print('\t- Subscription: '+str(subscription))
 	
+	# prints all the user of the server
 	def getAllUsers(self):
 		# New form to the response
 		formResponse = Form()
@@ -356,21 +378,19 @@ class Cliente(ClientXMPP):
 			print('No response from server.')
 			self.disconnect()
 	
+	# send message
 	def enviarMensaje(self,contacto,mensaje):
-		#print('Enviar mensaje')
 		self.sendMessage(mto=contacto,
 						  mbody=mensaje,
 						  mtype='chat')
 	
+	# disconect to the server
 	def desconectarse(self):
 		# Using wait=True ensures that the send queue will be
 		# emptied before ending the session.
-		#print('Entra al metodo')
 		self.disconnect()
-		#print('Cierra sesion')
 
 	def start(self):
-		print('Loading...')
 		self.send_presence()
 		self.get_roster()
 		self.updateInboxContacts()
