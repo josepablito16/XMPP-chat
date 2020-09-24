@@ -38,9 +38,12 @@ $ cd XMPP-chat
 # Create a python virtual env
 $ virtualenv env
 
-# Activate the virtual environment 
+# Activate the virtual environment Windows
 $ cd env\Scripts\
 $ activate.bat
+
+# Activate the virtual environment Linux
+$ source env/bin/activate
 
 # Install the requirements packages
 $ cd ../..
