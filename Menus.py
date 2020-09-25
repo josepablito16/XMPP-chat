@@ -1,6 +1,7 @@
 import time
 import os
 import platform
+import getpass
 
 if(platform.system()=='Windows'):
 	BORRAR='cls'
@@ -48,7 +49,7 @@ def printMenuLogIn():
     print("***  Login  ***")
     print("***************")
     user=input("Enter your user name: ")
-    password=input("Enter your password: ")
+    password=getpass.getpass("Enter your password: ")
     return user,password
 
 def printAddUserMenu():
@@ -190,14 +191,13 @@ def printMenuRegister():
         print("***  Register Account  ***")
         print("**************************")
         user=input("Enter your user name: ")
-        password=input("Enter your password: ")
-        confirmPassword=input("Confirm your password: ")
+        password=getpass.getpass("Enter your password: ")
+        confirmPassword=getpass.getpass("Confirm your password: ")
         if('@' not in user):
             print('User without domain!')
         if(password != confirmPassword):
             print('Passwords do not match!')
         if(('@' in user) and (password==confirmPassword)):
-            print('Todo bien')
             return user,password
 
         print(user)

@@ -1,5 +1,5 @@
 import time
-import cliente
+import Cliente as cliente
 import Menus
 import os
 import sys
@@ -117,13 +117,13 @@ if __name__ == "__main__":
 			if(userInput=='1'):
 				#!Log in
 				os.system(BORRAR)
-				#user,password=Menus.printMenuLogIn()
-				user,password='tomas@redes2020.xyz','Tomas2020'
-				#user,password='jode2@redes2020.xyz','Jode2020'
+				user,password=Menus.printMenuLogIn()
+
 				xmpp = cliente.Cliente(user,password)
 				xmpp.add_event_handler("session_start",handleSession, threaded=True)
 				if xmpp.connect(('redes2020.xyz', 5222)):
 					xmpp.process(block=False)
+					os.system(BORRAR)
 					print('Loading...')
 					break
 			elif(userInput=='2'):
